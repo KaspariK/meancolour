@@ -10,7 +10,7 @@ import (
 )
 
 func Image() {
-	f, err := os.Open("red.jpg")
+	f, err := os.Open("white.jpg")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -29,7 +29,7 @@ func Image() {
 }
 
 func MeanColour(i image.Image) color.Color {
-	var r, g, b uint32
+	var r, g, b uint64
 
 	bounds := i.Bounds()
 
@@ -37,19 +37,19 @@ func MeanColour(i image.Image) color.Color {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			pr, pg, pb, _ := i.At(x, y).RGBA()
 
-			r += pr
-			g += pg
-			b += pb
+			r += uint64(pr)
+			g += uint64(pg)
+			b += uint64(pb)
 		}
 	}
 
-	d := uint32(bounds.Dy() * bounds.Dx())
+	d := uint64(bounds.Dy() * bounds.Dx())
 
 	r /= d
 	g /= d
 	b /= d
 
-	return color.NRGBA{R: uint8(r), G: uint8(g), B: uint8(b), A: 255}
+	return color.NRGBA{R: uint8(r / 0x101), G: uint8(g / 0x101), B: uint8(b / 0x101), A: 255}
 }
 
 func main() {
