@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"io"
+	"log"
 	"os"
 
 	_ "image/jpeg"
@@ -15,26 +17,26 @@ import (
 // TODO: calculate median colour as well as mean. I find that mean is "muddy"
 // TODO: calculate mode colour. May as well do all of them
 
-func Image() {
-	f, err := os.Open("white.jpg")
+func getJPEGColour(filename string) color.Color{
+	f, err := os.Open(filename)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 	defer f.Close()
 
-	img, fmtName, err := image.Decode(f)
-	if err != nil {
-		fmt.Println(err)
-	}
+	log.Printf("Successfully opened %s\n", filename)
 
-	fmt.Printf("%s successfully decoded\n", fmtName)
-
-	colour := MeanColour(img)
-
-	fmt.Printf("Mean image colour: %v\n", colour)
+	return meanColour(f)
 }
 
-func MeanColour(i image.Image) color.Color {
+func meanColour(f io.Reader) color.Color {
+	i, fmtName, err := image.Decode(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Successfully decoded %s\n", fmtName)
+
 	var r, g, b uint64
 
 	bounds := i.Bounds()
@@ -59,5 +61,8 @@ func MeanColour(i image.Image) color.Color {
 }
 
 func main() {
-	Image()
+	filename := "red.jpg"
+	colour := getJPEGColour(filename)
+
+	fmt.Printf("Mean colour of %s: %v\n", filename, colour)
 }
