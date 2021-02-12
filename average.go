@@ -9,6 +9,12 @@ import (
 	_ "image/jpeg"
 )
 
+// TODO: handle more than jpeg
+// TODO: unit testing. Possibly restructure to avoid file i/o
+// TODO: is uint64 the best approach? Maybe stick with uint32 and batch the pixels?
+// TODO: calculate median colour as well as mean. I find that mean is "muddy"
+// TODO: calculate mode colour. May as well do all of them
+
 func Image() {
 	f, err := os.Open("white.jpg")
 	if err != nil {
