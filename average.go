@@ -9,15 +9,15 @@ import (
 	"os"
 
 	_ "image/jpeg"
+	_ "image/png"
 )
 
 // TODO: handle more than jpeg
-// TODO: unit testing. Possibly restructure to avoid file i/o
 // TODO: is uint64 the best approach? Maybe stick with uint32 and batch the pixels?
 // TODO: calculate median colour as well as mean. I find that mean is "muddy"
 // TODO: calculate mode colour. May as well do all of them
 
-func getJPEGColour(filename string) color.Color{
+func getImageColour(filename string) color.Color{
 	f, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -61,8 +61,8 @@ func meanColour(f io.Reader) color.Color {
 }
 
 func main() {
-	filename := "red.jpg"
-	colour := getJPEGColour(filename)
+	filename := "cowboy.png"
+	colour := getImageColour(filename)
 
 	fmt.Printf("Mean colour of %s: %v\n", filename, colour)
 }
